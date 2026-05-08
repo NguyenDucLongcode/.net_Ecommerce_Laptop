@@ -1,0 +1,190 @@
+﻿@model IEnumerable<ComChienMaDui.Models.Product>
+
+@{
+    ViewBag.Title = "Sản phẩm";
+}
+
+<div class="shop pt-5">
+    <div class="row">
+        <div class="col-lg-3 wow fadeInUp" data-wow-delay="0.1s" id="sidebar-container">
+            @* Products Categories ViewComponent - truyền categoryId đã chọn *@
+            @await Component.InvokeAsync("ProductsCategories", new { selectedCategoryId = ViewBag.CategoryId })
+
+            <hr />
+
+            @* AdditionalPrince ViewComponent - truyền minPrice, maxPrice đã chọn *@
+            @await Component.InvokeAsync("AdditionalPrince", new { minPrice = ViewBag.MinPrice, maxPrice = ViewBag.MaxPrice })
+
+            <hr />
+            @* Products Brand ViewComponent - Thêm mới *@
+            @await Component.InvokeAsync("ProductsBrand", new { selectedBrandId = ViewBag.BrandId })
+
+        </div>
+
+        @* Body *@
+
+        <div class="col-lg-9 wow fadeInUp d-flex flex-column gap-2">
+            <!-- Sort Component -->
+            <div class="d-flex justify-content-end">
+                @await Component.InvokeAsync("SortProducts", new { selectedSort = ViewBag.CurrentSort })
+            </div>
+
+             @* List sản phầm *@
+            <div  data-wow-delay="0.1s" id="product-list-container">
+
+                <partial name="_ProductList" model="Model" />
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function loadProducts(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function() {
+                    $('#product-list-container').css('opacity', '0.5');
+                },
+                success: function(data) {
+                    $('#product-list-container').html(data).css('opacity', '1');
+                    var newUrl = url;
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                },
+                error: function() {
+                    $('#product-list-container').html('<div class="alert alert-danger">Có lỗi xảy ra, vui lòng thử lại!</div>').css('opacity', '1');
+                }
+            });
+        }
+
+        // Hủy bỏ sự kiện cũ trước khi gắn mới
+        $(document).off('click', '.pagination a');
+        $(document).off('change', '.category-radio');
+        $(document).off('change', '.brand-radio');  // THÊM MỚI
+        $(document).off('change', '.price-radio');
+        $(document).off('change', '#sortOptions'); // THÊM MỚI CHO SẮP XẾP
+
+        // Xử lý khi click vào link phân trang
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var url = $(this).attr('href');
+            loadProducts(url);
+            return false;
+        });
+
+        // Xử lý khi chọn radio button category
+        $(document).on('change', '.category-radio', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if ($(this).is(':checked')) {
+                var categoryId = $(this).val();
+                var url = new URL(window.location.href);
+
+                if (categoryId) {
+                    url.searchParams.set('categoryId', categoryId);
+                } else {
+                    url.searchParams.delete('categoryId');
+                }
+                url.searchParams.set('page', '1');
+
+                loadProducts(url.toString());
+
+                // Cập nhật trạng thái active cho category
+                $('.category-radio').prop('checked', false);
+                $(this).prop('checked', true);
+                $('.categories-item label').removeClass('fw-bold text-primary');
+                $(this).next('label').addClass('fw-bold text-primary');
+            }
+            return false;
+        });
+
+        // Xử lý khi chọn radio button brand (THÊM MỚI)
+        $(document).on('change', '.brand-radio', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if ($(this).is(':checked')) {
+                var brandId = $(this).val();
+                var url = new URL(window.location.href);
+
+                if (brandId) {
+                    url.searchParams.set('brandId', brandId);
+                } else {
+                    url.searchParams.delete('brandId');
+                }
+                url.searchParams.set('page', '1');
+
+                loadProducts(url.toString());
+
+                // Cập nhật trạng thái active cho brand
+                $('.brand-radio').prop('checked', false);
+                $(this).prop('checked', true);
+                $('.brand-item label').removeClass('fw-bold text-primary');
+                $(this).next('label').addClass('fw-bold text-primary');
+            }
+            return false;
+        });
+
+        // Xử lý khi chọn radio button price
+        $(document).on('change', '.price-radio', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if ($(this).is(':checked')) {
+                var minPrice = $(this).data('min-price');
+                var maxPrice = $(this).data('max-price');
+                var url = new URL(window.location.href);
+
+                url.searchParams.delete('minPrice');
+                url.searchParams.delete('maxPrice');
+
+                if (minPrice !== '' && minPrice !== undefined && minPrice !== null) {
+                    url.searchParams.set('minPrice', minPrice);
+                }
+
+                if (maxPrice !== '' && maxPrice !== undefined && maxPrice !== null) {
+                    url.searchParams.set('maxPrice', maxPrice);
+                }
+
+                url.searchParams.set('page', '1');
+
+                loadProducts(url.toString());
+
+                // Cập nhật trạng thái active cho price
+                $('.price-radio').prop('checked', false);
+                $(this).prop('checked', true);
+                $('.price-item label').removeClass('fw-bold text-primary');
+                $(this).next('label').addClass('fw-bold text-primary');
+            }
+            return false;
+        });
+
+        // Xử lý khi Thay đổi Sắp xếp
+        $(document).on('change', '#sortOptions', function() {
+            var selectedValue = $(this).val();
+            var url = new URL(window.location.href);
+
+            if (selectedValue && selectedValue !== 'default') {
+                url.searchParams.set('CurrentSort', selectedValue);
+            } else {
+                url.searchParams.delete('CurrentSort');
+            }
+            url.searchParams.set('page', '1');
+
+            loadProducts(url.toString());
+        });
+
+        // Xử lý khi nhấn nút back/forward của trình duyệt
+        window.addEventListener('popstate', function(event) {
+            loadProducts(window.location.href);
+        });
+    </script>
+}

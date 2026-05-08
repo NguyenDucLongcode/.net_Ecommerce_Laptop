@@ -1,0 +1,55 @@
+﻿@model ComChienMaDui.DTOs.LoginDto
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+    // Đừng quên cập nhật tên _Layout - Copy nếu bạn sử dụng layout riêng.
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-lg p-4">
+                <h3 class="text-center mb-4 text-primary">Đăng Nhập</h3>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success mt-3 text-center">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="form-label fw-bold">Email</label>
+                        <input asp-for="Email" class="form-control" placeholder="Nhập địa chỉ email..." />
+                        <span asp-validation-for="Email" class="text-danger fs-6"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="Password" class="form-label fw-bold">Mật khẩu</label>
+                        <input asp-for="Password" class="form-control" placeholder="Nhập mật khẩu..." />
+                        <span asp-validation-for="Password" class="text-danger fs-6"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary py-2 rounded-pill">Đăng Nhập</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <span>Chưa có tài khoản? </span>
+                        <a href="/Account/Register" class="text-primary text-decoration-none">Đăng ký ngay</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

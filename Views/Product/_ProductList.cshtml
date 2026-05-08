@@ -1,0 +1,79 @@
+﻿@model IEnumerable<ComChienMaDui.Models.Product>
+
+<div class="row g-4 product">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4">
+            <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
+                <div class="product-item-inner border rounded">
+                    <div class="product-item-inner-item">
+                        <img src="~/images/logo.png" class="img-fluid w-100 rounded-top" alt="">
+                        <div class="product-new fs-5">@item.DiscountPercent %</div>
+                        <div class="product-details">
+                            <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="text-center rounded-bottom p-4">
+                        <a href="#" class="d-block mb-2">@(item.Category?.Name ?? "No Category")</a>
+                        <a href="#" class="d-block h4">@item.Name</a>
+                        <del class="me-2 fs-5">@ComChienMaDui.Helpers.Format.FormatPrice(item.OriginalPrice)₫</del>
+                        <span class="text-primary fs-5">@ComChienMaDui.Helpers.Format.FormatPrice(item.Price)₫</span>
+                    </div>
+                </div>
+                <div class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
+                    <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex">
+                             @{
+                                 int rating = item.Reviews != null && item.Reviews.Any(r => r.Rating.HasValue) 
+                                              ? (int)Math.Round(item.Reviews.Average(r => r.Rating.Value)) 
+                                              : 0;
+                             }
+                             @for (int i = 1; i <= rating; i++)
+                             {
+                                  <i class="fas fa-star text-primary"></i>
+                             }
+
+                             @for (int i = rating; i < 5; i++)
+                             {
+                                  <i class="far fa-star text-primary"></i>
+                             }  
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Pagination -->
+<div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="pagination d-flex justify-content-center mt-5">
+                
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchQuery = ViewBag.SearchQuery, categoryId = ViewBag.CategoryId })" class="rounded ajax-link">&laquo;</a>
+        }
+        else
+        {
+            <a href="javascript:void(0)" class="rounded text-muted" style="pointer-events: none; opacity: 0.6;">&laquo;</a>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a href="@Url.Action("Index", new { page = i, searchQuery = ViewBag.SearchQuery, categoryId = ViewBag.CategoryId })" class="@((i == ViewBag.CurrentPage) ? "active" : "") rounded ajax-link">@i</a>
+        }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchQuery = ViewBag.SearchQuery, categoryId = ViewBag.CategoryId })" class="rounded ajax-link">&raquo;</a>
+        }
+        else
+        {
+            <a href="javascript:void(0)" class="rounded text-muted" style="pointer-events: none; opacity: 0.6;">&raquo;</a>
+        }
+                
+    </div>
+</div>

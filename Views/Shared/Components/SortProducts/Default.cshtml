@@ -1,0 +1,14 @@
+﻿@{
+    string selectedSort = ViewBag.SelectedSort ?? "default";
+}
+
+<div class="sort-wrapper">
+    <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between align-items-center">
+        <label for="sortOptions" class="me-2 fw-semibold">Sắp xếp:</label>
+        <select id="sortOptions" name="sortList" class="border-0 form-select-sm bg-light" style="cursor: pointer;">
+            <option value="default" selected="@(selectedSort == "default")">Mặc định</option>
+            <option value="price_asc" selected="@(selectedSort == "price_asc")">Giá tăng dần</option>
+            <option value="price_desc" selected="@(selectedSort == "price_desc")">Giá giảm dần</option>
+        </select>
+    </div>
+</div>

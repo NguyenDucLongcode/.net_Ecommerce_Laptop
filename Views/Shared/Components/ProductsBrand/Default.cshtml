@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ComChienMaDui.Models.Brand>
+
+<div class="product-brand mb-4">
+    <h4>Thương hiệu</h4>
+
+    <div>
+        <div class="brand-item mb-2 d-flex justify-content-between">
+            <div>
+                <input type="radio" class="me-2 brand-radio" id="brand-all" name="brandId" value=""
+                       @(ViewBag.SelectedBrandId == null ? "checked" : "")>
+                <label for="brand-all" class="text-dark">
+                    Tất cả thương hiệu
+                </label>
+            </div>
+            <span class="text-muted">(@Model.Sum(b => b.Products?.Count ?? 0))</span>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var brand in Model)
+            {
+                <div class="brand-item mb-2 d-flex justify-content-between">
+                    <div>
+                        <input type="radio" class="me-2 brand-radio" id="brand-@brand.Id" name="brandId" value="@brand.Id"
+                               @(ViewBag.SelectedBrandId == brand.Id ? "checked" : "")>
+                        <label for="brand-@brand.Id" class="text-dark @(ViewBag.SelectedBrandId == brand.Id ? "fw-bold text-primary" : "")">
+                            @brand.Name
+                        </label>
+                    </div>
+                    <span class="text-muted">(@(brand.Products?.Count ?? 0))</span>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">Không có thương hiệu nào</p>
+        }
+    </div>
+</div>  

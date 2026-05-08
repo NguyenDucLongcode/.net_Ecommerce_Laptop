@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ComChienMaDui.Models.Category>
+
+<div class="product-categories mb-4">
+    <h4>Danh mục sản phẩm</h4>
+
+    <form id="categoryFilterForm">
+        <div class="categories-item mb-2">
+            <div>
+                <input type="radio" class="me-2 category-radio" id="category-all" name="categoryId" value="" @(ViewBag.SelectedCategoryId == null ? "checked" : "")>
+                <label for="category-all" class="text-dark">
+                    Tất cả sản phẩm
+
+                </label>
+            </div>
+          
+            <span class="text-muted">(@Model.Sum(c => c.Products?.Count ?? 0))</span>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var category in Model)
+            {
+                <div class="categories-item mb-2">
+                    <div>
+                        <input type="radio" class="me-2 category-radio" id="category-@category.Id" name="categoryId" value="@category.Id"
+                               @(ViewBag.SelectedCategoryId == category.Id ? "checked" : "")>
+                        <label for="category-@category.Id" class="text-dark @(ViewBag.SelectedCategoryId == category.Id ? "fw-bold text-primary" : "")">
+                            @category.Name
+
+                        </label>
+                    </div>
+                   
+                    <span class="text-muted">(@(category.Products?.Count ?? 0))</span>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">Không có danh mục nào</p>
+        }
+    </form>
+</div>
+

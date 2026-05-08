@@ -1,0 +1,34 @@
+﻿@model ComChienMaDui.ViewComponents.AdditionalProductViewModel
+
+<div class="additional-product mb-4">
+    <h4>Lọc theo giá</h4>
+
+    <form id="priceFilterForm">
+        <div class="price-item mb-2">
+            <div>
+                <input type="radio" class="me-2 price-radio" id="price-all" name="priceRange" value=""
+                       @(Model.MinPrice == null && Model.MaxPrice == null ? "checked" : "")>
+                <label for="price-all" class="text-dark">
+                    Tất cả
+                </label>
+            </div>
+        
+        </div>
+
+        @foreach (var range in Model.PriceRanges)
+        {
+            bool isActive = (Model.MinPrice == range.Min && Model.MaxPrice == range.Max);
+            <div class="price-item mb-2">
+                <div>
+                    <input type="radio" class="me-2 price-radio" id="price-@range.Id" name="priceRange"
+                           value="@range.Min|@range.Max" data-min-price="@range.Min" data-max-price="@range.Max"
+                           @(isActive ? "checked" : "")>
+                    <label for="price-@range.Id" class="text-dark @(isActive ? "fw-bold text-primary" : "")">
+                        @range.Label
+                    </label>
+                </div>
+         
+            </div>
+        }
+    </form>
+</div>
