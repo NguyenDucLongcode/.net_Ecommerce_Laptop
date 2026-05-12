@@ -1,14 +1,4 @@
-<<<<<<< HEAD
 using ComChienMaDui.Data;
-using Microsoft.EntityFrameworkCore;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-=======
-﻿using ComChienMaDui.Data;
 using ComChienMaDui.Models;
 using ComChienMaDui.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -86,7 +76,6 @@ builder.Services
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
 var myConnectionString = builder.Configuration.GetConnectionString("apicon");
 builder.Services.AddDbContext<EcommerceLaptopContext>(option => option.UseSqlServer(myConnectionString));
 
@@ -103,10 +92,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-<<<<<<< HEAD
-=======
 app.UseAuthentication();
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -116,9 +102,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
 app.Run();

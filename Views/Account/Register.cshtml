@@ -28,13 +28,17 @@
 
                     <div class="form-group mb-3">
                         <label asp-for="Password" class="form-label fw-bold">Mật khẩu</label>
-                        <input asp-for="Password" class="form-control" placeholder="Nhập mật khẩu..." />
+                        <div class="input-group">
+                            <input asp-for="Password" id="passwordInput" type="password" class="form-control"
+                                   placeholder="Nhập mật khẩu..." />
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fa fa-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
                         <span asp-validation-for="Password" class="text-danger fs-6"></span>
                     </div>
 
-                  
-                   
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-2 mt-4">
                         <button type="submit" class="btn btn-primary py-2 rounded-pill">Đăng Ký</button>
                     </div>
 
@@ -46,11 +50,26 @@
             </div>
         </div>
     </div>
-</div>
+</div>  
 
-@* Script này kích hoạt validation động ở client side mà không cần load lại trang *@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordInput = document.getElementById("passwordInput");
+            const toggleIcon = document.getElementById("toggleIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        });
+    </script>
 }
