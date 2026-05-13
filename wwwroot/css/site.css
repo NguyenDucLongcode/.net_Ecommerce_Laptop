@@ -1,0 +1,15 @@
+﻿.payment-btn {
+    height: 55px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 14px;
+    transition: 0.3s;
+}
+
+    .payment-btn:hover {
+        transform: scale(1.02);
+    }
+
+.card {
+    border-radius: 20px;
+}

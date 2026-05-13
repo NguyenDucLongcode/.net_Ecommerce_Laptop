@@ -1,0 +1,111 @@
+﻿@model ComChienMaDui.Models.Order
+
+<div class="container mt-5">
+
+    <div class="row">
+
+        <!-- LEFT -->
+        <div class="col-md-7">
+
+            <div class="card shadow-lg border-0 rounded-4 p-4">
+
+                <h2 class="fw-bold mb-4">
+                    Thông Tin Giao Hàng
+                </h2>
+
+                <div class="mb-3">
+                    <label>Họ tên</label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.CustomerName"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label>Số điện thoại</label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.Phone"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label>Địa chỉ</label>
+
+                    <textarea class="form-control"
+                              rows="4"
+                              readonly>@Model.Address</textarea>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-md-5">
+
+            <div class="card shadow-lg border-0 rounded-4 p-4">
+
+                <h3 class="fw-bold mb-4">
+                    Đơn Hàng
+                </h3>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Mã đơn:</span>
+
+                    <strong>#@Model.OrderId</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Tổng tiền:</span>
+
+                    <strong class="text-danger">
+                        @Model.TotalAmount.ToString("N0") VNĐ
+                    </strong>
+                </div>
+
+                <hr />
+
+                <h5 class="mb-4">
+                    Phương thức thanh toán
+                </h5>
+
+                <!-- COD -->
+                <form asp-action="ProcessCOD" method="post">
+
+                    <input type="hidden"
+                           name="orderId"
+                           value="@Model.OrderId" />
+
+                    <button type="submit"
+                            class="btn btn-warning w-100 payment-btn mb-3">
+
+                        Thanh toán COD
+
+                    </button>
+
+                </form>
+
+                <!-- VNPAY -->
+                <button class="btn btn-primary w-100 payment-btn mb-3">
+
+                    Thanh toán VNPAY
+
+                </button>
+
+                <!-- MOMO -->
+                <button class="btn btn-danger w-100 payment-btn">
+
+                    Thanh toán MOMO
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
