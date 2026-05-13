@@ -1,14 +1,4 @@
-<<<<<<< HEAD
 using ComChienMaDui.Data;
-using Microsoft.EntityFrameworkCore;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-=======
-﻿using ComChienMaDui.Data;
 using ComChienMaDui.Models;
 using ComChienMaDui.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,107 +8,94 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cấu hình EmailSettings từ appsettings.json
-builder.Services.Configure<EmailSettings>(
-    builder.Configuration.GetSection("EmailSettings")
-);
+// ==========================================
+// 1. CẤU HÌNH GỬI EMAIL
+// ==========================================
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
-builder.Services.AddScoped<IEmailService, EmailService>(); // Đăng ký dịch vụ EmailService với DI container
+// ==========================================
+// 2. CẤU HÌNH BẢO MẬT JWT (ĐĂNG NHẬP)
+// ==========================================
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 
-// Cấu hình JwtSettings từ appsettings.json
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("Jwt")
-);
-
-// Lấy JwtSettings để sử dụng trong ứng dụng
-var jwtSettings = builder.Configuration
-    .GetSection("Jwt")
-    .Get<JwtSettings>();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// Cấu hình Authentication với JWT Bearer
-builder.Services
-    .AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        // Thiết lập scheme mặc định cho xác thực và thách thức (challenge)
-        options.DefaultAuthenticateScheme =
-            JwtBearerDefaults.AuthenticationScheme;
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings!.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+    };
 
-        // Thiết lập scheme mặc định cho thách thức (challenge) khi xác thực thất bại
-        options.DefaultChallengeScheme =
-            JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
+    options.Events = new JwtBearerEvents
     {
-        // Cấu hình các tham số xác thực token JWT
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-
-                ValidIssuer = jwtSettings!.Issuer,
-                ValidAudience = jwtSettings.Audience,
-
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwtSettings.Key)
-                )
-            };
-            
-        // Thêm cấu hình đọc Token từ Cookie "AuthToken"
-        options.Events = new JwtBearerEvents
+        OnMessageReceived = context =>
         {
-            OnMessageReceived = context =>
+            if (context.Request.Cookies.ContainsKey("AuthToken"))
             {
-                if (context.Request.Cookies.ContainsKey("AuthToken"))
-                {
-                    context.Token = context.Request.Cookies["AuthToken"];
-                }
-                return Task.CompletedTask;
+                context.Token = context.Request.Cookies["AuthToken"];
             }
-        };
-    });
+            return Task.CompletedTask;
+        }
+    };
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
-var myConnectionString = builder.Configuration.GetConnectionString("apicon");
+// ==========================================
+// 3. CẤU HÌNH DATABASE & MVC
+// ==========================================
+builder.Services.AddControllersWithViews();
+
+var myConnectionString = builder.Configuration.GetConnectionString("MyConnectString");
 builder.Services.AddDbContext<EcommerceLaptopContext>(option => option.UseSqlServer(myConnectionString));
+
+// ==========================================
+// BẬT SESSION CHO GIỎ HÀNG (TAO MỚI THÊM VÀO ĐÂY)
+// ==========================================
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Giữ giỏ hàng 30 phút
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ==========================================
+// 4. CẤU HÌNH PIPELINE XỬ LÝ YÊU CẦU
+// ==========================================
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
-<<<<<<< HEAD
-=======
+// GỌI SESSION RA SỬ DỤNG (TAO MỚI THÊM VÀO ĐÂY NỮA NÈ)
+app.UseSession();
+
 app.UseAuthentication();
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
 app.UseAuthorization();
 
 app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
 app.Run();

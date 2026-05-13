@@ -1,19 +1,14 @@
 ﻿<div class="container-fluid nav-bar p-0">
     <div class="row gx-0 bg-primary px-5 py-3 d-flex align-items-center">
 
-        <!-- Logo bên trái -->
         <div class="col-lg-5 col-12 text-center text-md-start mb-3 mb-md-0 d-flex gap-3 ">
             <a href="/">
                 <h1 class="m-0"><i class="fas fa-shopping-bag text-secondary me-2"></i><span class="fs-5 text-white">Cơm chiên má đùi</span></h1>
             </a>
 
-            <!-- Input Search  -->
-             <partial name="_InputSearch" />
+            <partial name="_InputSearch" />
         </div>
 
-       
-
-        <!-- Menu + Nút bên phải -->
         <div class="col-lg-7 col-6">
             <nav class="navbar navbar-expand-lg navbar-light bg-primary p-0">
                 <button class="navbar-toggler ms-auto mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -21,72 +16,30 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0 text-center">
-                        @* page Home *@
-                        <a asp-controller="Home" asp-action="index" class="nav-item nav-link active text-white">
-                            Trang chủ
-                        </a>
-
-                        <a asp-controller="Product" asp-action="index" class="nav-item nav-link active text-white">
-                            Sản phầm
-                        </a>
-                    
-                        <a href="/cart" class="nav-item nav-link text-white">Shop Cart</a>
-                        <a href="/checkout" class="nav-item nav-link text-white">Checkout</a>
-
+                        <a asp-controller="Home" asp-action="index" class="nav-item nav-link active text-white">Trang chủ</a>
+                        <a asp-controller="Product" asp-action="index" class="nav-item nav-link active text-white">Sản phẩm</a>
+                        <a href="/cart" class="nav-item nav-link text-white">Giỏ hàng</a>
+                        <a href="/checkout" class="nav-item nav-link text-white">Thanh toán</a>
                     </div>
-<<<<<<< HEAD
-                    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-light rounded-pill py-2 px-4 text-primary fw-bold">
-                            <i class="fa fa-sign-in-alt me-2"></i> Đăng nhập
-                        </a>
-                        <a asp-controller="Account" asp-action="Register" class="btn btn-secondary rounded-pill py-2 px-4 text-white fw-bold">
-                            <i class="fa fa-mobile-alt me-2"></i> Đăng ký
-                        </a>
-=======
 
-                    @* Phần đăng nhập/đăng ký hoặc thông tin người dùng *@
-                    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0 align-items-center">
+                    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0 align-items-center ms-lg-3">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <div class="nav-item dropdown">
-                                <a href="#"
-                                   class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2"
-                                   data-bs-toggle="dropdown">
-
+                                <a href="#" class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" data-bs-toggle="dropdown">
                                     <img src="https://ui-avatars.com/api/?name=@(User.Identity?.Name)&background=random"
                                          alt="Avatar"
                                          class="rounded-circle border border-2 border-light"
                                          style="width: 35px; height: 35px; object-fit: cover;">
-
-                                    <span class="user-name text-truncate">
-                                        @User.Identity?.Name
-                                    </span>
+                                    <span class="user-name text-truncate">@User.Identity?.Name</span>
                                 </a>
-
                                 <div class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 p-2">
-
                                     <div class="px-3 py-2">
-                                        <div class="fw-semibold text-dark text-truncate"
-                                             style="max-width: 220px;">
-                                            @User.Identity?.Name
-                                        </div>
+                                        <div class="fw-semibold text-dark text-truncate" style="max-width: 220px;">@User.Identity?.Name</div>
                                     </div>
-
                                     <hr class="dropdown-divider">
-
-                                    @* <a href="#" class="dropdown-item rounded-2">
-                                         Tài khoản của tôi
-                                        </a>
-
-                                         <a href="/Order/History" class="dropdown-item rounded-2">
-                                           Đơn hàng
-                                          </a> *@
-
-                                    <a asp-controller="Account"
-                                       asp-action="Logout"
-                                       class="dropdown-item text-danger rounded-2">
-                                        <i class="fa fa-sign-out-alt me-2"></i>
-                                        Đăng xuất
+                                    <a asp-controller="Account" asp-action="Logout" class="dropdown-item text-danger rounded-2">
+                                        <i class="fa fa-sign-out-alt me-2"></i> Đăng xuất
                                     </a>
                                 </div>
                             </div>
@@ -100,15 +53,11 @@
                                 <i class="fa fa-mobile-alt me-2"></i> Đăng ký
                             </a>
                         }
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
                     </div>
                 </div>
             </nav>
         </div>
     </div>
-<<<<<<< HEAD
-</div>
-=======
 </div>
 
 <style>
@@ -121,4 +70,3 @@
         font-weight: 500;
     }
 </style>
->>>>>>> 94c5e59 (Thêm chưc năng gửi email để xác nhận tài khoản khi đăng kí và thêm chức năng login  bằng jwt để xác thực người dùngCommit 2)
