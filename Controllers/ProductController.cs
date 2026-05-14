@@ -16,9 +16,12 @@ namespace ComChienMaDui.Controllers
         public async Task<IActionResult> Index(string searchQuery, int? categoryId, int? brandId, decimal? minPrice, decimal? maxPrice, string? CurrentSort, int page = 1)
         {
             int pageSize = 9;
+            
+            // Lấy danh sách sản phẩm và LỌC RA những sản phẩm có dữ liệu lớn hơn 0 (còn hàng)
             var query = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
+                .Where(p => p.Stock != null && p.Stock > 0) // <--- THÊM ĐIỀU KIỆN NÀY VÀO ĐÂY
                 .AsQueryable();
 
             // Xử lý search by Name
@@ -63,12 +66,13 @@ namespace ComChienMaDui.Controllers
                     break;
             }
 
+            // Đếm tổng số lượng và số trang
             int totalItems = await query.CountAsync();
             int totalPages = totalItems > 0 ? (int)Math.Ceiling(totalItems / (double)pageSize) : 1;
 
             var products = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((page - 1) * pageSize) // Bỏ qua các sản phẩm của trang trước
+                .Take(pageSize)              // Lấy số sản phẩm của trang hiện tại
                 .ToListAsync();
 
             ViewBag.CurrentPage = page;
