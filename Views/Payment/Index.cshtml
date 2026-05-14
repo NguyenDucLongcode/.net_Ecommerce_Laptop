@@ -1,0 +1,126 @@
+﻿@model List<ComChienMaDui.Models.Cart>
+@using Microsoft.EntityFrameworkCore
+
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<div class="container mt-5 mb-5">
+    
+    <h2 class="mb-4 text-primary"><i class="fas fa-shopping-cart me-2"></i> Giỏ hàng của bạn</h2>
+    <div class="row g-4">
+        <!-- Phần bên trái: Form nhập thông tin khách hàng -->
+        <div class="col-md-6">
+            <div class="shadow-sm rounded p-4 bg-white">
+                <h4 class="mb-4 fw-bold text-primary">
+                    <i class="bi bi-person-lines-fill"></i> Thông tin nhận hàng
+                </h4>
+
+                <form id="checkoutForm" method="post" asp-controller="Payment" asp-action="PlaceOrder">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="FullName" required placeholder="Nhập họ tên đầy đủ">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Số điện thoại <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control" name="Phone" required placeholder="0xx xxx xxxx">
+                    </div>
+
+                 
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Địa chỉ giao hàng <span class="text-danger">*</span></label>
+                        <textarea class="form-control" name="Address" rows="2" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Ghi chú</label>
+                        <textarea class="form-control" name="Note" rows="2" placeholder="Ghi chú về giao hàng (thời gian, hướng dẫn,...)"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Phương thức thanh toán</label>
+                        <select class="form-select" name="PaymentMethod">
+                            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="bank">Chuyển khoản ngân hàng</option>
+                            <option value="momo">Ví MoMo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Phần bên phải: Giỏ hàng (nội dung của bạn) -->
+        <div class="col-md-6">
+            <div class="shadow-sm rounded p-4 bg-white">
+                <h4 class="mb-4 fw-bold text-primary">
+                    <i class="bi bi-cart-check"></i> Đơn hàng của bạn
+                </h4>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th style="width: 100px; text-align: center;">Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="~/images/logo.png" alt="@item.Product?.Name" style="width: 60px; height: 60px; object-fit: contain;" class="me-3 border rounded p-1">
+                                            <span class="fw-bold">@item.Product?.Name</span>
+                                        </div>
+                                    </td>
+                                    <td>@(item.Product?.Price != null ? ((double)item.Product.Price).ToString("#,##0") : "0") đ</td>
+                                    <td style="width: 100px;">
+                                        <input type="number" class="form-control text-center bg-white" value="@item.Quantity" readonly>
+                                    </td>
+                                    <td class="text-danger fw-bold">
+                                        @(item.Product?.Price != null ? ((double)(item.Product.Price * item.Quantity)).ToString("#,##0") : "0") đ
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tổng cộng đơn hàng -->
+                <div class="border-top mt-3 pt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tạm tính:</span>
+                        <span class="fw-bold">
+                            @{
+                                double total = Model.Sum(x => (double)(x.Product?.Price ?? 0) * x.Quantity);
+                            }
+                            @total.ToString("#,##0") đ
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Phí vận chuyển:</span>
+                        <span class="text-success">Miễn phí</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 fs-5">
+                        <span class="fw-bold">Tổng cộng:</span>
+                        <span class="fw-bold text-danger fs-4">@total.ToString("#,##0") đ</span>
+                    </div>
+                </div>
+
+                <!-- Nút thanh toán -->
+                <button type="submit" form="checkoutForm" class="btn btn-danger w-100 py-2 fw-bold fs-5 mt-2">
+                    <i class="bi bi-credit-card"></i> ĐẶT HÀNG NGAY
+                </button>
+                <p class="text-muted small text-center mt-2 mb-0">
+                    <i class="bi bi-shield-check"></i> Thông tin của bạn được bảo mật
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+

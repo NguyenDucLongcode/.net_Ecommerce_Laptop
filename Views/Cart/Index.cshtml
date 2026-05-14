@@ -6,6 +6,15 @@
 }
 
 <div class="container mt-5 mb-5">
+    <!-- HIỂN THỊ THÔNG BÁO ĐẶT HÀNG THÀNH CÔNG -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm text-center" role="alert">
+            <i class="fas fa-check-circle me-2 fs-4 align-middle"></i>
+            <span class="fs-5 fw-bold">@TempData["SuccessMessage"]</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <h2 class="mb-4 text-primary"><i class="fas fa-shopping-cart me-2"></i> Giỏ hàng của bạn</h2>
 
     @if (Model == null || Model.Count == 0)
@@ -94,7 +103,7 @@
             </div>
             <div class="col-md-6 text-end">
                 <h4 class="mb-3">Tổng cộng: <span class="text-danger fw-bold fs-3">@Model.Sum(x => (x.Product?.Price ?? 0) * x.Quantity).ToString("#,##0") đ</span></h4>
-                <a href="/Checkout" class="btn btn-success btn-lg rounded-pill px-5 shadow">Tiến hành thanh toán <i class="fas fa-arrow-right ms-2"></i></a>
+                <a href="payment" class="btn btn-success btn-lg rounded-pill px-5 shadow">Tiến hành thanh toán <i class="fas fa-arrow-right ms-2"></i></a>
             </div>
         </div>
     }
