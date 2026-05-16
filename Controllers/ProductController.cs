@@ -88,5 +88,20 @@ namespace ComChienMaDui.Controllers
 
             return View(products);
         }
+        // TRANG CHI TIẾT SẢN PHẨM (SINGLE PAGE)
+        public IActionResult Details(int id)
+        {
+            // Dùng Include để "lôi" luôn danh sách thông số kỹ thuật (Specifications) đi theo con Laptop này
+            var product = _context.Products
+                                  .Include(p => p.Specifications)
+                                  .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound("Không tìm thấy con Laptop này mày ơi!");
+            }
+
+            return View(product);
+        }
     }
 }
