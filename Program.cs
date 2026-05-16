@@ -59,7 +59,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 // ==========================================
 builder.Services.AddControllersWithViews();
 
-var myConnectionString = builder.Configuration.GetConnectionString("MyConnectString");
+var myConnectionString = builder.Configuration.GetConnectionString("apicon");
 builder.Services.AddDbContext<EcommerceLaptopContext>(option => option.UseSqlServer(myConnectionString));
 
 // ==========================================
