@@ -1,0 +1,89 @@
+﻿@model ComChienMaDui.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết " + Model.Name;
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row bg-white p-4 shadow-sm rounded">
+        <div class="col-md-5 text-center">
+            <img src="@Model.ImageUrl" class="img-fluid rounded border p-2" alt="@Model.Name" style="max-height: 400px; object-fit: contain;" />
+        </div>
+
+        <div class="col-md-7">
+            <h2 class="fw-bold text-dark mb-3">@Model.Name</h2>
+            <h3 class="text-danger fw-bolder mb-3">@Model.Price.ToString("#,##0") đ</h3>
+
+            <p class="text-muted mb-4">
+                @Model.Description
+            </p>
+
+            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="bg-light p-3 rounded">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="d-flex align-items-center gap-3">
+                    <label class="fw-bold">Số lượng:</label>
+                    <input type="number" name="quantity" value="1" min="1" class="form-control text-center" style="width: 100px;" />
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4 shadow">
+                        <i class="fas fa-cart-plus me-2"></i> Thêm vào giỏ hàng
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i> Thông số kỹ thuật chi tiết</h5>
+                </div>
+                <div class="card-body bg-white p-4">
+                    @if (Model.Specifications != null && Model.Specifications.Any())
+                    {
+                        // Lấy bộ thông số đầu tiên của con Laptop này ra
+                        var spec = Model.Specifications.FirstOrDefault();
+
+                        <table class="table table-bordered table-striped mt-3">
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold" style="width: 30%; background-color: #f8f9fa;">
+                                        <i class="fas fa-microchip me-2 text-primary"></i> CPU
+                                    </td>
+                                    <td>@spec.Cpu</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold" style="background-color: #f8f9fa;">
+                                        <i class="fas fa-memory me-2 text-primary"></i> RAM
+                                    </td>
+                                    <td>@spec.Ram</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold" style="background-color: #f8f9fa;">
+                                        <i class="fas fa-hdd me-2 text-primary"></i> Ổ cứng (Storage)
+                                    </td>
+                                    <td>@spec.Storage</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold" style="background-color: #f8f9fa;">
+                                        <i class="fas fa-desktop me-2 text-primary"></i> Màn hình
+                                    </td>
+                                    <td>@spec.Screen</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold" style="background-color: #f8f9fa;">
+                                        <i class="fas fa-video me-2 text-primary"></i> Card đồ họa (VGA)
+                                    </td>
+                                    <td>@spec.Graphics</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic mb-0">Đang cập nhật thông số kỹ thuật cho sản phẩm này...</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
