@@ -14,6 +14,9 @@ public partial class Order
     public string? Status { get; set; }
 
     public DateTime? CreatedAt { get; set; }
+    
+    // Add this property to fix CS1061
+    public DateTime OrderDate { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 

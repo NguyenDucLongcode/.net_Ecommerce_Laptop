@@ -52,17 +52,38 @@ namespace ComChienMaDui.Controllers
 
             order.Status = "Processing";
 
-            _context.Payments.Add(payment);
+            // Đưa toàn bộ Danh sách chi tiết Order vào DB
+            _context.OrderDetails.AddRange(orderDetails);
 
-            _context.SaveChanges();
+                // 2. XÓA TẤT CẢ SẢN PHẨM Ở GIỎ HÀNG THUỘC USER NÀY
+                _context.Carts.RemoveRange(carts);
+                _context.SaveChanges();
 
-            return RedirectToAction("Success");
-        }
+                // 3. Gửi thông báo thành công thông qua TempData
+                TempData["SuccessMessage"] = $"Đã đặt hàng thành công! Đơn hàng của {FullName} sẽ được giao đến {Address}.";
+            
 
-        // Thành công
-        public IActionResult Success()
+                // 4. Chuyển hướng người dùng quay lại trang Giỏ hàng
+                return RedirectToAction("Index", "Cart");
+            }
+        // DANH SÁCH ĐƠN HÀNG
+    public async Task<IActionResult> Orders()
         {
-            return View();
+            var orders = await _context.Orders.ToListAsync();
+
+            return View(orders);
         }
-    }
+
+        // CHI TIẾT ĐƠN HÀNG
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            var details = await _context.OrderDetails
+                .Include(x => x.Product)
+                .Where(x => x.OrderId == id)
+                .ToListAsync();
+
+            return View(details);
+        }
+    }       
+    
 }

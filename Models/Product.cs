@@ -40,4 +40,7 @@ public partial class Product
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual ICollection<Specification> Specifications { get; set; } = new List<Specification>();
+
+    // Add this property if it does not exist
+    public string Image { get; set; } = null!;
 }
