@@ -22,7 +22,7 @@
         <div class="alert alert-warning text-center p-5 shadow-sm rounded">
             <h4>Giỏ hàng đang trống!</h4>
             <p>Vui lòng quay lại trang Sản phẩm để chọn mua những chiếc Laptop cực chiến nhé.</p>
-            <a href="/Product" class="btn btn-primary rounded-pill px-4 py-2 mt-3">Tiếp tục mua sắm</a>
+            <a href="/" class="btn btn-primary rounded-pill px-4 py-2 mt-3">Tiếp tục mua sắm</a>
         </div>
     }
     else
@@ -99,7 +99,7 @@
 
         <div class="row mt-4">
             <div class="col-md-6">
-                <a href="/Product" class="btn btn-outline-secondary rounded-pill px-4"><i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm</a>
+                <a href="/" class="btn btn-outline-secondary rounded-pill px-4"><i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm</a>
             </div>
             <div class="col-md-6 text-end">
                 <h4 class="mb-3">Tổng cộng: <span class="text-danger fw-bold fs-3">@Model.Sum(x => (x.Product?.Price ?? 0) * x.Quantity).ToString("#,##0") đ</span></h4>

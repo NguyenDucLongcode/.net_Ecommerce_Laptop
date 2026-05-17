@@ -9,8 +9,10 @@
                     <div class="product-item-inner-item">
                         <img src="~/images/logo.png" class="img-fluid w-100 rounded-top" alt="">
                         <div class="product-new fs-5">@item.DiscountPercent %</div>
+
+                         @* link đến action detail của product *@
                         <div class="product-details">
-                            <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye fa-1x"></i></a>
                         </div>
                     </div>
 

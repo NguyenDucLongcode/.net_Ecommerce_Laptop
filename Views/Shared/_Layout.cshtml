@@ -19,15 +19,17 @@
 
     <!-- Libraries Stylesheet -->
     <link href="~/lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"> <!-- Đã thêm ~/ -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/comchienmadui.styles.css" asp-append-version="true" />
+    
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet"> <!-- Đã thêm ~/ quan trọng nhất để Footer có màu -->
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/comchienmadui.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header class="sticky-top">
@@ -47,11 +49,15 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true">
+    <script src="~/js/site.js" asp-append-version="true"></script> <!-- Đã đóng thẻ script đàng hoàng -->
+    
+    <!-- Các thư viện bên ngoài -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script></script>
+    
+    <!-- Thêm ~/ cho các thư viện lib tĩnh -->
+    <script src="~/lib/wow/wow.min.js"></script> 
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="~/js/main.js"></script>
   
     @await RenderSectionAsync("Scripts", required: false)
