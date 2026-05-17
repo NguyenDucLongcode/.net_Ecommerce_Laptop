@@ -36,15 +36,19 @@
                             Trang chủ
                         </a>
 
-                        <a href="/cart"
-                           class="nav-item nav-link text-white">
+                  
+                        <a asp-controller="Cart"
+                           asp-action="Index"
+                           class="nav-item nav-link  text-white">
                             Giỏ hàng
                         </a>
 
-                        <a href="/checkout"
-                           class="nav-item nav-link text-white">
+                        <a asp-controller="Order"
+                           asp-action="Index"
+                           class="nav-item nav-link  text-white">
                             Đơn hàng
                         </a>
+                        
                     </div>
 
                     <!-- Auth -->

@@ -1,0 +1,53 @@
+﻿@model List<Order>
+
+<h2 class="text-danger mb-4">
+    🛒 Danh sách đơn hàng
+</h2>
+
+<table class="table table-bordered table-hover">
+
+    <thead class="table-danger">
+
+        <tr>
+            <th>Mã đơn</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Chi tiết</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.Id</td>
+
+                <td>
+                    @item.CreatedAt
+                </td>
+
+                <td class="text-danger fw-bold">
+                    @(item.TotalAmount?.ToString("#,##0") ?? "0") đ
+                </td>
+               
+                <td>
+
+                    <a asp-action="OrderDetail"
+                       asp-route-id="@item.Id"
+                       class="btn btn-danger">
+
+                        Xem chi tiết
+
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
